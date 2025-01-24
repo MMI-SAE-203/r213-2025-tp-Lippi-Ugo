@@ -1,5 +1,6 @@
 ---
 import Base from "../layout/Base.astro";
+import Card from "../components/Card.astro";
 
 const offres = [
     {
@@ -40,15 +41,17 @@ const offres = [
 <Base titre="Offres">
 	<h1 class="text-4xl">Offres</h1>
 	<p>Ceci est la page des offres. Vous trouverez sur cette page différentes offres</p>
-	<div>
-		{ offres.map((offre) => (
-				// afficher les nom des maisons sous forme de liste <ul>.
-			<ul >
-				<li>
-					{offre.nomMaison}
-				</li>
-			</ul>
-			))
-		}
+	<div x-data="{ showFavorites: false }">
+		<button @click="showFavorites = !showFavorites">
+			<span x-show="!showFavorites">Afficher les favoris</span>
+			<span x-show="showFavorites">Afficher tout</span>
+		</button>
+	
+		<div x-show="!showFavorites">
+			{offres.map((offre) => <Card {...offre} />)}
+		</div>
+		<div x-show="showFavorites">
+            {offres.map((offre) => offre.favori && <Card {...offre} />)}
+		</div>
 	</div>
 </Base>
