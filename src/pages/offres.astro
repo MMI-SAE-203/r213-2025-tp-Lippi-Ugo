@@ -21,4 +21,21 @@ const events = await getOffres();
 			{events.map((offre) => offre.favori && <Card {...offre} />)}
 		</div>
 	</div>
+
+	<div x-data="{ bool: false }">
+        <button @click="bool = !bool" class="mb-4 px-4 py-2 bg-blue-500 text-white rounded">
+            <span x-show="!bool">Afficher en grille</span>
+        </button>
+        <button @click="bool = !bool" class="mb-4 px-4 py-2 bg-blue-500 text-white rounded">
+            <span x-show="!bool">Afficher en liste</span>
+        </button>
+
+        <div x-show="!bool && view ==='grid'">
+            {events.map((offre) => <Card {...offre} />)}
+        </div>
+        
+        <div x-show="bool && view ==='list'">
+            {events.map((offre) => <Card {...offre} />)}
+        </div>
+    </div>
 </Base>
