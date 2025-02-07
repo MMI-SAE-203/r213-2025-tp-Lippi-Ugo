@@ -15,8 +15,8 @@ const { titre } = Astro.props;
     </head>
     <body>
         <Header/>
-        <Hero Pagetitre = {titre}/>
         <main class="p-8">
+            <Hero Pagetitre = {titre}/>
             <slot />
         </main>
         <Footer/>
