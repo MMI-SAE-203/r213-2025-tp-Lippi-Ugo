@@ -1,0 +1,19 @@
+---
+import { bySurface } from "../../../backend.mjs";
+import Base from '../../../layout/Base.astro';
+
+
+const { surface } = Astro.params;
+export const prerender = false;
+const maisons = await bySurface(Number(surface));
+---
+
+<Base titre={maisons?.surface}>
+    <ul>
+        {maisons.map((offre) => (
+            <li {offre.id}>
+                <a href={`/offres/surface/${offre.id}`}>{offre.nomMaison}</a> - {offre.surface} m²
+            </li>
+        ))}
+    </ul>
+</Base>
