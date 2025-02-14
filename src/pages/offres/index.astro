@@ -3,7 +3,30 @@ import Base from "../../layout/Base.astro";
 import Card from "../../components/Card.astro";
 
 import { getOffres } from "../../backend.mjs";
+import {filterByPrix} from "../../backend.mjs"
 const events = await getOffres();
+
+let Offres = [];
+let message = '';
+if (Astro.request.method === "POST") {
+	const data = await Astro.request.formData();
+	const minPrix = parseInt(data.get("minPrix"));
+	const maxPrix = parseInt(data.get("maxPrix"));
+
+	if (minPrix > 0 && maxPrix > 0 && maxPrix > minPrix) {
+		Offres = await filterByPrix(minPrix, maxPrix);
+
+		if (Offres.length === 0) {
+			message = `Pas d'offres entre ${minPrix}€ et ${maxPrix}€`;
+		} else {
+			message = `Liste des offres entre ${minPrix}€ et ${maxPrix}€`;
+		}
+	} else {
+		message = "Veuillez entrer des valeurs valides pour le prix.";
+	}
+} else {
+	Offres = await getOffres();
+}
 ---
 <Base titre="Offres">
 	<h1 class="text-4xl mb-4">Offres</h1>
@@ -13,6 +36,11 @@ const events = await getOffres();
 			<span x-show="!showFavorites">Afficher les favoris</span>
 			<span x-show="showFavorites">Afficher tout</span>
 		</button>
+		<form action="/offres" method="POST">
+			<input type="number" name="minPrix" placeholder="Prix minimum" />
+			<input type="number" name="maxPrix" placeholder="Prix maximum" />
+			<input type="submit" value="Filtrer par prix" />
+		</form>
 	
 		<div x-show="!showFavorites" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 			{events.map((offre) => <Card {...offre} />)}
