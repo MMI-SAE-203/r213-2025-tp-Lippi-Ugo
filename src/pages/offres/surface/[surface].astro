@@ -8,10 +8,10 @@ export const prerender = false;
 const maisons = await bySurface(Number(surface));
 ---
 
-<Base titre={maisons?.surface}>
+<Base titre={`Surface: ${surface} m²`}>
     <ul>
         {maisons.map((offre) => (
-            <li {offre.id}>
+            <li id={offre.id}>
                 <a href={`/offres/surface/${offre.id}`}>{offre.nomMaison}</a> - {offre.surface} m²
             </li>
         ))}

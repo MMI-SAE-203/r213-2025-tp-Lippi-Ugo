@@ -5,6 +5,7 @@ import {addOffre} from "../../backend.mjs"
 let message = '';
 if (Astro.request.method === "POST") {
     const formData = await Astro.request.formData();
+    console.log(formData)
     const response = await addOffre(formData);
     message = response.message;
 }
@@ -13,13 +14,13 @@ if (Astro.request.method === "POST") {
 <Base>
     <h1 class="text-lg">Ajouter une offre</h1>
     <p>{message}</p>
-    <form action="/offres/add" method="POST" enctype="multipart/form-data">
+    <form class="flex flex-col p-4" action="/offres/add" method="POST" enctype="multipart/form-data">
         <input type="text" name="nomMaison" placeholder="Nom de la maison" required class="w-full mt-2 p-2 border border-gray-300 rounded-md" />
-        <input type="number" name="prix" placeholder="Prix" />
-        <input type="number" name="nbSdb" placeholder="Nombre de salles de bain"  />
-        <input type="number" name="nbChambres" placeholder="Nombre de chambres"  />
-        <input type="number" name="surface" placeholder="Superficie"  />
-        <input type="file" name="image"  />
-        <button type="submit">Ajouter</button>
+        <input type="number" name="prix" placeholder="Prix" class="w-full mt-2 p-2 border border-gray-300 rounded-md"/>
+        <input type="number" name="nbSdb" placeholder="Nombre de salles de bain"  class="w-full mt-2 p-2 border border-gray-300 rounded-md"/>
+        <input type="number" name="nbChambres" placeholder="Nombre de chambres"  class="w-full mt-2 p-2 border border-gray-300 rounded-md"/>
+        <input type="number" name="surface" placeholder="Superficie"  class="w-full mt-2 p-2 border border-gray-300 rounded-md"/>
+        <input type="file" name="image" />
+        <button type="submit" class="mb-4 px-4 py-2 bg-blue-500 text-white rounded">Ajouter</button>
     </form>
 </Base>
