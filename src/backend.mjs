@@ -55,12 +55,12 @@ export async function addOffre(house) {
 
 export async function filterByPrix(prixMin, prixMax) {
     try {
-        let data = await pb.collection('maison').getFullList({
+        let data = await db.collection('maison').getFullList({
             sort: '-created',
             filter: `prix >= ${prixMin} && prix <= ${prixMax}`
         });
         data = data.map((maison) => {
-            maison.imageUrl = pb.files.getURL(maison, maison.image);
+            maison.imageUrl = db.files.getURL(maison, maison.image);
             return maison;
         });
         return data;
@@ -68,4 +68,41 @@ export async function filterByPrix(prixMin, prixMax) {
         console.log('Une erreur est survenue en filtrant la liste des maisons', error);
         return [];
     }
+}
+
+export async function allAgent() {
+    try {
+        let agents = await db.collection("agent").getFullList();
+        console.log(agents);
+        
+        return agents
+    } catch (error) {
+        console.error("error allAgent: ", error);
+        return null;
+    }
+}
+
+export async function allEventsByAgent(agentId) {
+    try {
+        console.log("ok dans allEvent", agentId);
+        
+        let maisons = await db.collection("maison").getFullList({
+            filter: `Agent = "${agentId}"`,
+            expand: "Agent",
+        });
+        maisons = maisons.map((maison) => {
+            maison.img = db.files.getURL(maison, maison.image);
+            return maison;
+        });
+        console.log("les maisons",{maisons});
+        
+        return maisons;
+    } catch (error) {
+        console.error("error allEventsByAgent: ", error);
+        return [];
+    }
+}
+
+export async function setFavori(house) {
+    await db.collection('maison').update(house.id, {favori: !house.favori});
 }

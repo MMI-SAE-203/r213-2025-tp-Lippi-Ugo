@@ -1,10 +1,10 @@
 ---
-const {nomMaison, nbChambres, nbSdb, prix, surface, favori, adresse, imgUrl,id} = Astro.props;
+const {...offres} = Astro.props;
 ---
 
-<div x-data={`{favori: ${favori}}`} class="card p-2 rounded-lg shadow-lg">
-    <img src={imgUrl} alt={nomMaison} />
-    <h2 class="text-xl font-bold mb-2">{nomMaison}</h2>
+<div x-data={`{favori: ${offres.favori}, clickFavori() {this.favori = !this.favori; setFavori(${JSON.stringify(offres)});}}`}>
+    <img src={offres.imgUrl} alt={offres.nomMaison} />
+    <h2 class="text-xl font-bold mb-2">{offres.nomMaison}</h2>
 <!--
     <p class="text-gray-600 mb-1">{adresse}</p>
     <p class="text-gray-700 mb-1">{nbChambres} chambres</p>
@@ -12,6 +12,15 @@ const {nomMaison, nbChambres, nbSdb, prix, surface, favori, adresse, imgUrl,id} 
     <p class="text-gray-700 mb-4">{surface} m²</p>
     <p class="text-green-500 font-semibold mb-1">{prix} €</p>
 -->
-    <button @click="favori = !favori" x-bind:class="favori ? 'bg-yellow-500 hover:bg-yellow-700' : 'bg-blue-500 hover:bg-blue-700'" class="text-white px-4 py-2 rounded">Favori</button>
-    <a href={`/offres/${id}`} class="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded">Voir plus</a>
+    <button @click="clickFavori">
+        <img :src="favori ? '/favorite_filled.png' : '/favorite.png'" alt="Favorite Icon" class="w-6 h-6" />
+    </button>
+    <a href={`/offres/${offres.id}`} class="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded">Voir plus</a>
 </div>
+
+
+<script>
+    //@ts-nocheck
+    import { setFavori } from "/src/backend.mjs";
+    window.setFavori = setFavori;
+</script>

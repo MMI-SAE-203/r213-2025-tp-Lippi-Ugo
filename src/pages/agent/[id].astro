@@ -1,0 +1,21 @@
+---
+import Layout from "../../layout/Base.astro";
+import { allEventsByAgent } from "../../backend.mjs";
+import Carousel from "../../components/Carousel.astro";
+
+const { id } = Astro.params;
+const eventsByAgent = await allEventsByAgent(id);
+if (!eventsByAgent){
+    console.error(`L'id ${id} n'a pas d'événement attribué`);
+    return Astro.redirect("/agent");
+}
+const agentName = eventsByAgent[0].expand?.Agent.nom + ' ' + eventsByAgent[0].expand?.Agent.prenom;
+console.log(eventsByAgent);
+---
+
+<Layout title="Agent">
+    <h1 class="text-6xl">Events by {agentName}</h1>
+    <div>
+        <Carousel events={eventsByAgent} />
+    </div>
+</Layout>
